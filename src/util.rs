@@ -154,6 +154,24 @@ where
 use itertools::{Itertools, Position as IPos};
 use syn::ExprLit;
 use syn::Lit;
+/// Split a doc in 2 parts: before ///! and after
+fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attribute>){
+    let mut is_split = false;
+    let mut docs_last_2prev:Vec::<Attribute> = vec![];
+    let mut docs_last_2last:Vec::<Attribute> = vec![];
+    for mut attr in docs_last {
+        if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
+            if ! is_split {
+                let s = lit_s.value();
+                if  s.starts_with('!') { is_split = true;
+                    *lit_s = LitStr::new(&s[1..s.len()], lit_s.span());
+                        docs_last_2last.push(attr); // assign post ///! doc lines to the last parameter
+                } else {docs_last_2prev.push(attr);}
+            } else {    docs_last_2last.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
+        }
+    }
+    (docs_last_2prev,docs_last_2last)
+}
 /// Same as extract_documented_parameters, but shifts all docs by -1, returning the 1st parameter's docs separately,
 /// so that it can be used as a function comment
 /// Also allows splitting the last parameter's docs into 2: belonging to the last parameter (after ///!) and to the previous one
@@ -205,19 +223,6 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
     }
     let mut is_split = false;
     if let Some(ident_last) = ident_last { // on ///! split the docs between 2 parameters, removing !
-        let mut docs_last_2prev:Vec::<Attribute> = vec![];
-        let mut docs_last_2last:Vec::<Attribute> = vec![];
-        for mut attr in docs_last {
-            if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
-                if ! is_split {
-                    let s = lit_s.value();
-                    if  s.starts_with('!') { is_split = true;
-                        *lit_s = LitStr::new(&s[1..s.len()], lit_s.span());
-                            docs_last_2last.push(attr); // assign post ///! doc lines to the last parameter
-                    } else {docs_last_2prev.push(attr);}
-                } else {    docs_last_2last.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
-            }
-        }
         if ! docs_last_2last.is_empty() {
             if let Some(mut docum_par_prev) = documented_params.pop() {
               docum_par_prev.docs = docs_last_2prev;
