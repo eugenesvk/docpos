@@ -258,10 +258,8 @@ pub fn extract_documented_generics(
 }
 
 
-/// extract the documented generic parameters from a collection of generics as a collection of documented identifiers
-/// This will also remove all the doc comments from the collection of generics, but will leave all the other attributes untouched.
 /// Same as extract_documented_generics, but shifts all docs by -1
-/// Also allows splitting the last generic's docs into 2: belonging to the last generic (after ///!) and to the previous one
+/// Also allows splitting the last generic's doc into 2: belonging to the last generic (after ///!) and to the previous one
 /// fn with_lifetimes_pos <
 ///   'a    ,/// a lifetime
 ///   S     ,
@@ -271,19 +269,42 @@ pub fn extract_documented_generics(
 ///   const N: usize, // it's a syntax error to add doc comments at the end
 /// >(){}
 pub fn extract_documented_generics_shift_up(generics: &'_ mut Generics,) -> Result<Vec<DocumentedIdent<'_>>, syn::Error> {
-    let mut documented_generics = Vec::with_capacity(generics.params.len());
-    for param in generics.params.iter_mut() {
-        let (ident, attrs) = match param {
-            syn::GenericParam::Lifetime(lif) => (&lif.lifetime.ident, &mut lif.attrs),
-            syn::GenericParam::Type    (ty ) => (&ty          .ident, &mut ty.attrs ),
-            syn::GenericParam::Const   (con) => (&con         .ident, &mut con.attrs),
+    let mut doc_gen = Vec::with_capacity(generics.params.len());
+
+    let mut id_prev  :Option<     &Ident     > = None;
+    let mut id_last  :Option<     &Ident     > = None;
+    let mut id_only  :Option<     &Ident     > = None;
+    let mut docs_last:       Vec::<Attribute> = vec![];
+    let mut i   :usize = 0; // track the iter position for args with non-empty docs to allow merging pre doc→1st and 2nd gen→1st
+    for (pos,param) in generics.params.iter_mut().with_position() {
+        i += 1;
+        let (id, attrs) = match param {
+            syn::GenericParam::Lifetime(lif) => (&lif.lifetime.ident, &mut lif.attrs), // id=a attrs=..."doc" ...lit="a lifetime"
+            syn::GenericParam::Type    (ty ) => (&ty          .ident, &mut ty .attrs), // id=T
+            syn::GenericParam::Const   (con) => (&con         .ident, &mut con.attrs), // id=N
         };
-        let docs = extract_doc_attrs(attrs);
+        println!("attrs = {attrs:?}");
+        let mut docs = extract_doc_attrs(attrs);
         if !docs.is_empty() {
-            documented_generics.push(DocumentedIdent::new(ident, docs))
-        }
+            match pos {
+                IPos::Only   => {doc_gen.push(DocumentedIdent::new(id, docs));},
+                IPos::First  => {doc_gen.push(DocumentedIdent::new(id, docs));}, // pre-gen docs go to the 1st par as in prefixed docs
+                IPos::Middle => {let id_prev = id_prev.take().expect("saved prev id");
+                    if i==2 {if let Some(mut doc_gen1) = doc_gen.pop() {
+                    doc_gen1.docs.append(&mut docs); doc_gen.push(doc_gen1                           )  ;  // gen2 docs append to  gen1
+                    } else {                         doc_gen.push(DocumentedIdent::new(id_prev, docs));};  //   … or    become new gen1
+                    } else {                         doc_gen.push(DocumentedIdent::new(id_prev, docs));};
+                    },// gen3+ as usual
+                IPos::Last   => {id_last = Some(id); docs_last = docs;break;},
+            }; // ↓ don't set on last item, break before
+        }; id_prev = Some(id); // save id even without docs since next docs might need to be split-attached to it
     }
-    Ok(documented_generics)
+    if let Some(id_last) = id_last { // on ///! split the docs between 2 generics, removing !
+        let (docs2prev,docs2last) = split_doc_in2(docs_last);
+        if ! docs2prev.is_empty() {doc_gen.push(DocumentedIdent::new(id_prev.expect("saved prev ident"), docs2prev))};
+        if ! docs2last.is_empty() {doc_gen.push(DocumentedIdent::new(id_last                           , docs2last))};
+    }
+    Ok(doc_gen)
 }
 
 /// make a documentation block, which is a markdown list of
