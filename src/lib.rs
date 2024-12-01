@@ -29,7 +29,7 @@ use quote::{quote, ToTokens};
 use syn::{parse_macro_input, Attribute, ItemFn};
 use util::{
     extract_documented_generics, extract_documented_parameters,
-    extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block,
+    extract_documented_generics_shift_up, extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block,
 };
 mod util;
 
@@ -128,7 +128,7 @@ pub fn argdocpos(
 
     let (doc_params_to_fn, documented_params) = try2!(extract_documented_parameters_shift_up(function.sig.inputs.iter_mut()));
     let maybe_empty_doc_par_to_fn: Vec<Attribute> = doc_params_to_fn.unwrap_or_else(|| vec![]);
-    let documented_generics     = try2!(extract_documented_generics(&mut function.sig.generics));
+    let documented_generics     = try2!(extract_documented_generics_shift_up(&mut function.sig.generics));
     let has_documented_params   = !documented_params  .is_empty();
     let has_documented_generics = !documented_generics.is_empty();
 

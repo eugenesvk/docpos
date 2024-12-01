@@ -248,6 +248,35 @@ pub fn extract_documented_generics(
     Ok(documented_generics)
 }
 
+
+/// extract the documented generic parameters from a collection of generics as a collection of documented identifiers
+/// This will also remove all the doc comments from the collection of generics, but will leave all the other attributes untouched.
+/// Same as extract_documented_generics, but shifts all docs by -1
+/// Also allows splitting the last generic's docs into 2: belonging to the last generic (after ///!) and to the previous one
+/// fn with_lifetimes_pos <
+///   'a    ,/// a lifetime
+///   S     ,
+///   T     ,/// doc for T line 1
+///          /// doc for T line 2
+///          ///! a const generic
+///   const N: usize, // it's a syntax error to add doc comments at the end
+/// >(){}
+pub fn extract_documented_generics_shift_up(generics: &'_ mut Generics,) -> Result<Vec<DocumentedIdent<'_>>, syn::Error> {
+    let mut documented_generics = Vec::with_capacity(generics.params.len());
+    for param in generics.params.iter_mut() {
+        let (ident, attrs) = match param {
+            syn::GenericParam::Lifetime(lif) => (&lif.lifetime.ident, &mut lif.attrs),
+            syn::GenericParam::Type    (ty ) => (&ty          .ident, &mut ty.attrs ),
+            syn::GenericParam::Const   (con) => (&con         .ident, &mut con.attrs),
+        };
+        let docs = extract_doc_attrs(attrs);
+        if !docs.is_empty() {
+            documented_generics.push(DocumentedIdent::new(ident, docs))
+        }
+    }
+    Ok(documented_generics)
+}
+
 /// make a documentation block, which is a markdown list of
 /// **<caption>**
 ///
