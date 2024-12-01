@@ -62,6 +62,13 @@ pub struct FunctionDocs {
     pub after_args_section: Vec<Attribute>,
 }
 
+/// Struct doc attributes split by whether they occur above or below the attribute that indicates where the field section should be placed.
+/// If no such attribute is present, we stick all the doc attributes in the before section
+pub struct StructDocs {
+    pub before_args_section: Vec<Attribute>,
+    pub after_args_section: Vec<Attribute>,
+}
+
 /// extract the documentation from the doc comments of the function and perform
 /// some additional logic
 pub fn extract_fn_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<FunctionDocs, syn::Error> {
