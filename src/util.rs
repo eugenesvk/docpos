@@ -113,6 +113,28 @@ pub fn extract_fn_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<FunctionDocs, 
     })
 }
 
+/// extract the documentation from the doc comments of the struct and perform some additional logic
+pub fn extract_struct_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<StructDocs, syn::Error> {
+    let mut before_args_section = Vec::with_capacity(attrs.len());
+    let mut after_args_section = Vec::with_capacity(attrs.len());
+
+    let mut idx = 0;
+    while idx < attrs.len() { // parse the arguments before the arguments-section attribute
+        let current_attr = attrs.get(idx).unwrap();
+        if is_parameters_section(current_attr) {idx += 1;break;}
+        if current_attr.path().is_ident("doc") {before_args_section.push(current_attr.clone());}
+        idx += 1;
+    }
+    while idx < attrs.len() {
+        let current_attr = attrs.get(idx).unwrap();
+        if is_parameters_section(current_attr) {return Err(syn::Error::new_spanned(current_attr,"Duplicate attribute not allowed.",));}
+        if current_attr.path().is_ident("doc") {after_args_section.push(current_attr.clone());}
+        idx += 1;
+    }
+    attrs.retain(|attr| !attr.path().is_ident("doc")); // delete all doc attributes from the struct (and the arguments section attributes that I don't need anymore)
+    Ok(StructDocs {before_args_section,after_args_section,})
+}
+
 /// an identifier (such as a function parameter or a generic type)
 /// with doc attributes
 pub struct DocumentedIdent<'a> {
