@@ -174,6 +174,8 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
     let mut ident_prev:Option<     &Ident     > = None;
     let mut ident_last:Option<     &Ident     > = None;
     let mut docs_last :       Vec::<Attribute> = vec![];
+    let mut inner_pos :IPos; // track the iter position for FnArg::Typed since a first 3rd args could be only the 1st FnArg::Typed
+    let mut inner_i   :usize = 0;
     for (pos,arg) in args.with_position() {
         match arg {
             FnArg::Typed(pat_type) => {
@@ -181,7 +183,14 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
                 let ident = &pat_ident.ident;
                 let docs = extract_doc_attrs(&mut pat_type.attrs);
                 if !docs.is_empty() {
-                    match pos {
+                    inner_i += 1;
+                    inner_pos = match pos {
+                        IPos::Only   => pos,
+                        IPos::First  => pos,
+                        IPos::Middle => if inner_i==1 {IPos::First} else {pos},
+                        IPos::Last   => if inner_i==1 {IPos::Only } else {pos},
+                    };
+                    match inner_pos {
                         IPos::Only   => {ident_last = Some(ident); docs_last =      docs;},
                         IPos::First  => {ident_prev = Some(ident); docs0     = Some(docs);},
                         IPos::Middle => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("preserved prev ident"), docs));
