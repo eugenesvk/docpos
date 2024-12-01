@@ -184,7 +184,7 @@ use itertools::{Itertools, Position as IPos};
 use syn::ExprLit;
 use syn::Lit;
 /// Split a doc in 2 parts: before ///! and after
-fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attribute>){
+pub fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attribute>){
     let mut is_split = false;
     let mut docs2this:Vec::<Attribute> = vec![];
     let mut docs2next:Vec::<Attribute> = vec![];
