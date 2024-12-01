@@ -26,11 +26,13 @@
 //! All types of generic arguments, including lifetimes and const-generics
 //! can be documented like this.
 use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct};
+use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, Fields, Field, FieldsNamed, Token};
+use syn::punctuated::Pair::Punctuated;
 use util::{
     extract_documented_generics, extract_documented_parameters,
     extract_documented_generics_shift_up, extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block,
     extract_struct_doc_attrs,
+    DocumentedIdent
 };
 use util_strct::extract_doc_fields_shift_up;
 mod util;
