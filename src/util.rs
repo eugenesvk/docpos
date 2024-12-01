@@ -157,20 +157,20 @@ use syn::Lit;
 /// Split a doc in 2 parts: before ///! and after
 fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attribute>){
     let mut is_split = false;
-    let mut docs_last_2prev:Vec::<Attribute> = vec![];
-    let mut docs_last_2last:Vec::<Attribute> = vec![];
+    let mut docs2this:Vec::<Attribute> = vec![];
+    let mut docs2next:Vec::<Attribute> = vec![];
     for mut attr in docs_last {
         if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
             if ! is_split {
                 let s = lit_s.value();
                 if  s.starts_with('!') { is_split = true;
                     *lit_s = LitStr::new(&s[1..s.len()], lit_s.span());
-                        docs_last_2last.push(attr); // assign post ///! doc lines to the last parameter
-                } else {docs_last_2prev.push(attr);}
-            } else {    docs_last_2last.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
+                        docs2next.push(attr); // assign post ///! doc lines to the last parameter
+                } else {docs2this.push(attr);}
+            }     else {docs2next.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
         }
     }
-    (docs_last_2prev,docs_last_2last)
+    (docs2this,docs2next)
 }
 /// Same as extract_documented_parameters, but shifts all docs by -1, returning the 1st parameter's docs separately,
 /// so that it can be used as a function comment
