@@ -193,7 +193,6 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
     let mut ident_last:Option<     &Ident     > = None;
     let mut ident_only:Option<     &Ident     > = None;
     let mut docs_last :       Vec::<Attribute> = vec![];
-    let mut not0_i   :usize = 0; // track the iter position for args with non-empty docs since a first 3rd args could be only the 1st doc
     for (pos,arg) in args.with_position() {
         match arg {
             FnArg::Typed(pat_type) => {
@@ -201,7 +200,6 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
                 let ident = &pat_ident.ident;
                 let docs = extract_doc_attrs(&mut pat_type.attrs);
                 if !docs.is_empty() {
-                    not0_i += 1;
                     match pos {
                         IPos::Only   => {ident_only = Some(ident); docs_last =      docs;break;},// break to avoid wrong ident_prev
                         IPos::First  => {                          docs0fn   = Some(docs);     },// no ///! split needed, pre-par docs go to fn
