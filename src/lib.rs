@@ -114,10 +114,9 @@ pub fn roxygen(
 
 #[proc_macro_attribute]
 /// the principal attribute inside this crate that lets us document function arguments, but after them, not before
-pub fn argdocpos(
-    _attr: proc_macro::TokenStream,
-    item: proc_macro::TokenStream,
-) -> proc_macro::TokenStream {
+pub fn argdocpos(_attr: proc_macro::TokenStream
+    ,            item : proc_macro::TokenStream,
+    )                -> proc_macro::TokenStream {
     let mut function: ItemFn = parse_macro_input!(item as ItemFn);
 
     try2!(function.attrs.iter_mut().try_for_each(|attr| {
