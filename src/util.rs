@@ -223,6 +223,7 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
               docum_par_prev.docs = docs_last_2prev;
               documented_params.push(docum_par_prev);
               documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
+              docum_par_prev.docs = docs_last_2prev; // replace last-1 item's docs with its pre-///! docs
             } else {
                 docs0 = Some(docs_last_2prev);
                 documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
