@@ -191,6 +191,7 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
     let mut docs0fn   :Option<Vec::<Attribute>> = None;
     let mut ident_prev:Option<     &Ident     > = None;
     let mut ident_last:Option<     &Ident     > = None;
+    let mut ident_only:Option<     &Ident     > = None;
     let mut docs_last :       Vec::<Attribute> = vec![];
     let mut inner_pos :IPos; // track the iter position for FnArg::Typed since a first 3rd args could be only the 1st FnArg::Typed
     let mut inner_i   :usize = 0;
@@ -209,31 +210,33 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
                         IPos::Last   => if inner_i==1 {IPos::Only } else {pos},
                     };
                     match inner_pos {
-                        IPos::Only   => {ident_last = Some(ident); docs_last =      docs;},
-                        IPos::First  => {ident_prev = Some(ident); docs0fn   = Some(docs);},
-                        IPos::Middle => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("preserved prev ident"), docs));
-                                         ident_prev = Some(ident);},
-                        IPos::Last   => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("preserved prev ident"), docs.clone()));
-                                         ident_last = Some(ident); docs_last =      docs},
-                    }
-                }
+                        IPos::Only   => {ident_only = Some(ident); docs_last =      docs;break;},//break to avoid wrong ident_prev
+                        IPos::First  => {                          docs0fn   = Some(docs);}, // no ///! split needed, pre-par docs go to fn
+                        IPos::Middle => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("saved prev ident"), docs));},
+                        IPos::Last   => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("saved prev ident"), docs.clone()));
+                                         ident_last = Some(ident); docs_last =      docs;break;},
+                    } // ↓ don't set on last item, break before
+                }; ident_prev = Some(ident); // save id even without docs since next docs might need to be split-attached to it
             }
             FnArg::Receiver(_) => {}
         }
     }
-    let mut is_split = false;
-    if let Some(ident_last) = ident_last { // on ///! split the docs between 2 parameters, removing !
+    if        let Some(ident_last) = ident_last { // on ///! split the docs between 2 parameters, removing !
+        let (docs_last_2prev,docs_last_2last) = split_doc_in2(docs_last);
         if ! docs_last_2last.is_empty() {
-            if let Some(mut docum_par_prev) = documented_params.pop() {
-              docum_par_prev.docs = docs_last_2prev;
-              documented_params.push(docum_par_prev);
-              documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
-              docum_par_prev.docs = docs_last_2prev; // replace last-1 item's docs with its pre-///! docs
-            } else {
-                docs0fn =      Some(docs_last_2prev);
+            if let Some(mut docum_par_prev) = documented_params.pop() { // replace last-1 item's docs with its pre-///! docs
+                docum_par_prev.docs = docs_last_2prev;
+                documented_params.push(docum_par_prev);
+                documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
+            } else {                                                    // add     last-i item's docs …
+                documented_params.push(DocumentedIdent::new(ident_prev.expect("saved prev ident"), docs_last_2prev));
                 documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
             }
         }
+    } else if let Some(ident_only) = ident_only { // on ///! split the docs between fn and parameter, removing !
+        let (docs_last_2prev,docs_last_2last) = split_doc_in2(docs_last);
+        if ! docs_last_2prev.is_empty() {                docs0fn = Some(docs_last_2prev);}
+                documented_params.push(DocumentedIdent::new(ident_only, docs_last_2last));
     }
     Ok((docs0fn,documented_params))
 }
