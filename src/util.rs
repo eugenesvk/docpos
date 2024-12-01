@@ -215,15 +215,15 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
         }
     }
     if        let Some(ident_last) = ident_last { // on ///! split the docs between 2 parameters, removing !
-        let (docs_last_2prev,docs_last_2last) = split_doc_in2(docs_last);
-        if ! docs_last_2last.is_empty() {
+        let (docs2prev,docs2last) = split_doc_in2(docs_last);
+        if ! docs2last.is_empty() {
             if let Some(mut docum_par_prev) = documented_params.pop() { // replace last-1 item's docs with its pre-///! docs
-                docum_par_prev.docs = docs_last_2prev;
+                docum_par_prev.docs = docs2prev;
                 documented_params.push(docum_par_prev);
-                documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
+                documented_params.push(DocumentedIdent::new(ident_last, docs2last));
             } else {                                                    // add     last-i item's docs …
-                documented_params.push(DocumentedIdent::new(ident_prev.expect("saved prev ident"), docs_last_2prev));
-                documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
+                documented_params.push(DocumentedIdent::new(ident_prev.expect("saved prev ident"), docs2prev));
+                documented_params.push(DocumentedIdent::new(ident_last, docs2last));
             }
         }
     } else if let Some(ident_only) = ident_only { // on ///! split the docs between fn and parameter, removing !
