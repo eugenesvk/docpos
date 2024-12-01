@@ -214,3 +214,4 @@ fn is_roxygen_main(attr: &Attribute) -> bool {
 fn is_argdocpos_main(attr: &Attribute) -> bool {
     attr.path().is_ident("argdocpos")
 }
+#[inline(always)]fn is_structdocpos_main(attr: &Attribute) -> bool {attr.path().is_ident("structdocpos")}
