@@ -227,9 +227,10 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
             }
         }
     } else if let Some(ident_only) = ident_only { // on ///! split the docs between fn and parameter, removing !
-        let (docs_last_2prev,docs_last_2last) = split_doc_in2(docs_last);
-        if ! docs_last_2prev.is_empty() {                docs0fn = Some(docs_last_2prev);}
-                documented_params.push(DocumentedIdent::new(ident_only, docs_last_2last));
+        let (docs2fn,docs2par) = split_doc_in2(docs_last);
+        if ! docs2fn .is_empty() {                docs0fn = Some(docs2fn);}
+        if ! docs2par.is_empty() {
+                documented_params.push(DocumentedIdent::new(ident_only, docs2par));}
     }
     Ok((docs0fn,documented_params))
 }
