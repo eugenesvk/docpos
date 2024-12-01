@@ -210,8 +210,5 @@ fn is_roxygen_main(attr: &Attribute) -> bool {
 }
 
 /// check whether an attribute is the raw #[argdocpos] main attribute.
-#[inline(always)]
-fn is_argdocpos_main(attr: &Attribute) -> bool {
-    attr.path().is_ident("argdocpos")
-}
+#[inline(always)]fn is_argdocpos_main   (attr: &Attribute) -> bool {attr.path().is_ident("argdocpos"   )}
 #[inline(always)]fn is_structdocpos_main(attr: &Attribute) -> bool {attr.path().is_ident("structdocpos")}
