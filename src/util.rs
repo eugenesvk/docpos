@@ -166,8 +166,7 @@ use syn::Lit;
 /// )
 pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribute>>,Vec<DocumentedIdent<'a>>), syn::Error>
     where                                        I:Iterator<Item = &'a mut FnArg>,{
-    // will contain the docs comments for each documented function parameter
-    // together with the identifier of the function parameter.
+    // will contain the docs comments for each documented function parameter together with the identifier of the function parameter
     let (lower, upper) = args.size_hint();
     let mut documented_params = Vec::<DocumentedIdent>::with_capacity(upper.unwrap_or(lower));
 
