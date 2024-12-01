@@ -170,7 +170,7 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
     let (lower, upper) = args.size_hint();
     let mut documented_params = Vec::<DocumentedIdent>::with_capacity(upper.unwrap_or(lower));
 
-    let mut docs0     :Option<Vec::<Attribute>> = None;
+    let mut docs0fn   :Option<Vec::<Attribute>> = None;
     let mut ident_prev:Option<     &Ident     > = None;
     let mut ident_last:Option<     &Ident     > = None;
     let mut docs_last :       Vec::<Attribute> = vec![];
@@ -192,7 +192,7 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
                     };
                     match inner_pos {
                         IPos::Only   => {ident_last = Some(ident); docs_last =      docs;},
-                        IPos::First  => {ident_prev = Some(ident); docs0     = Some(docs);},
+                        IPos::First  => {ident_prev = Some(ident); docs0fn   = Some(docs);},
                         IPos::Middle => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("preserved prev ident"), docs));
                                          ident_prev = Some(ident);},
                         IPos::Last   => {documented_params.push(DocumentedIdent::new(ident_prev.take().expect("preserved prev ident"), docs.clone()));
@@ -225,12 +225,12 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
               documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
               docum_par_prev.docs = docs_last_2prev; // replace last-1 item's docs with its pre-///! docs
             } else {
-                docs0 = Some(docs_last_2prev);
+                docs0fn =      Some(docs_last_2prev);
                 documented_params.push(DocumentedIdent::new(ident_last, docs_last_2last));
             }
         }
     }
-    Ok((docs0,documented_params))
+    Ok((docs0fn,documented_params))
 }
 
 
