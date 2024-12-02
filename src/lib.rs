@@ -156,15 +156,12 @@ fn docpos_fn(mut function:ItemFn) -> proc_macro::TokenStream {
 }
 
 #[proc_macro_attribute]
-/// the principal attribute inside this crate that lets us document struct arguments, but after them, not before
-pub fn structdocpos(_attr: proc_macro::TokenStream
-    ,               item : proc_macro::TokenStream,
-    )                -> proc_macro::TokenStream {
-    let mut strct: ItemStruct = parse_macro_input!(item as ItemStruct);
 
+/// Document struct arguments, but after them, not before
+fn docpos_struct(mut strct:ItemStruct) -> proc_macro::TokenStream {
     try2!(strct.attrs.iter_mut().try_for_each(|attr| {
-        if is_structdocpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
-        } else                        {Ok(())}}));
+        if is_docpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
+        } else                  {Ok(())}}));
 
     let strctn_docs = try2!(extract_struct_doc_attrs(&mut strct.attrs)); // extrac the doc attributes on the struct itself
 
