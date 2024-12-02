@@ -1,8 +1,8 @@
 /// here are some comments
 /// this arguments section should not be here
-#[roxygen::parameters_section]
+#[docpos::parameters_section]
 /// and some more
-#[roxygen::roxygen]
+#[docpos::docpos]
 pub fn add(
     /// some comments
     first: i32,

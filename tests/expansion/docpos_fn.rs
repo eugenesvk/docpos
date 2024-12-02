@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 #[docpos("fn")]
 fn foo( /// fnInner line 1

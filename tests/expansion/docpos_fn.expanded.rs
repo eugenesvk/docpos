@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 /// fnInner line 1
 /// fnInner line 2
 ///

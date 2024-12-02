@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 /// structPre line 1.
 /// structPre line 2.
 /// scructInner
@@ -9,7 +9,7 @@ use roxygen::*;
 ///
 pub struct StructyPos {pub x:i8, pub y:i8,}
 
-use roxygen::*;
+use docpos::*;
 /// structPre line 1.
 /// structPre line 2.
 /// scructInner

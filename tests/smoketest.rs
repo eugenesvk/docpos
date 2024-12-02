@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 // just a smoke test that the proc macro can indeed be used like this.
 // the real tests are in the macro expansion tests.

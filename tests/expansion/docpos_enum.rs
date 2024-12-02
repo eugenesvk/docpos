@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 #[docpos("enum")]
 pub enum EnumyPos { /// enumPos line1

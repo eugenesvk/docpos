@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 #[roxygen]
 /// here are some comments

@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 #[roxygen]
 /// this is documentation

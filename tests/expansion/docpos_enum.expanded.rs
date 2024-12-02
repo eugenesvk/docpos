@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 /// enumPos line1
 /// enumPos line2
 ///

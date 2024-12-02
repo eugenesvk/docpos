@@ -1,4 +1,4 @@
-use roxygen::*;
+use docpos::*;
 
 #[docpos("struct")]
 /// structPre line 1.

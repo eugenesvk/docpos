@@ -1,9 +1,9 @@
-use roxygen::roxygen;
+use docpos::roxygen;
 
 #[roxygen]
 /// long documention
 /// ...
-#[roxygen::parameters_section]
+#[docpos::parameters_section]
 /// # Examples
 /// ...
 fn foo(
