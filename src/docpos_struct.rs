@@ -11,7 +11,7 @@ pub fn docpos_struct(mut strct:ItemStruct) -> proc_macro::TokenStream {
     if is_docpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
     } else                  {Ok(())}}));
 
-  let strctn_docs = try2!(extract_struct_doc_attrs(&mut strct.attrs)); // extrac the doc attributes on the struct itself
+  let struct_docs = try2!(extract_struct_doc_attrs(&mut strct.attrs)); // extrac the doc attributes on the struct itself
 
   let (doc_params_to_strct, doc_fields) = try2!(extract_doc_fields_shift_up(strct.fields.iter_mut()));
   let maybe_empty_doc_par_to_fn: Vec<Attribute> = doc_params_to_strct.unwrap_or_else(|| vec![]);
@@ -25,8 +25,8 @@ pub fn docpos_struct(mut strct:ItemStruct) -> proc_macro::TokenStream {
   let parameter_doc_block = make_doc_block("Fields", doc_fields);
   // let generics_doc_block  = make_doc_block("Generics", documented_generics);
 
-  let docs_before = strctn_docs.before_args_section;
-  let docs_after  = strctn_docs.after_args_section;
+  let docs_before = struct_docs.before_args_section;
+  let docs_after  = struct_docs.after_args_section;
   let maybe_empty_doc_line = if !docs_after.is_empty() {Some(quote! {#[doc=""]})
   } else                                               {None};
 
