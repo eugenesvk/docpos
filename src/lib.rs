@@ -5,18 +5,15 @@
 //! Generic parameters can be documented with doc comments just as the arguments
 //! can be:
 //! ```rust
-//! use roxygen::roxygen;
+//! use docpos::docpos;
 //!
-//! #[roxygen]
+//! #[docpos]
 //! fn frobnicate<
-//! /// some comment goes here
-//! S,
+//! S, /// some comment goes here
 //! T> (
-//! /// the value being frobnicated
-//! frobnicator: T,
-//! /// the frobnicant
-//! frobnicant: S) -> T
-//! {
+//! frobnicator: T,/// the value being frobnicated
+//! frobnicant : S,/// the frobnicant
+//! ) -> T {
 //!    todo!()
 //! }
 //! ```
@@ -50,7 +47,7 @@ const PARAM_SECTION: &str = "parameters_section";
 /// the name of this crate
 const ROXYGEN_CRATE: &str = "roxygen";
 /// the name of the main macro in this crate
-const ROXYGEN_MACRO: &str = ROXYGEN_CRATE;
+const ROXYGEN_MACRO: &str = "roxygen";
 
 mod mhelp {
   // helper macro "try" on a syn::Error, so that we can return it as a token stream
