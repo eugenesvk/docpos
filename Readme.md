@@ -56,9 +56,7 @@ fn sum_image_rows_pos( /// sum the rows of an image
                           /// sums are placed. Must have space 
                           /// for exactly `nrows` elements
   sums      : &mut [f32], // doc comments are illegal here, so use "///!"-split comment syntax from ↑
-) -> Result<(),String> {
-    todo!()
-} 
+) -> Result<(),String> {} 
 ```
 
 (Or use the main roxygen's crate macro `roxygen` for reguler pre-doc-comment support)
@@ -70,21 +68,20 @@ if you had written a doc comment for the function like so:
 ```rust
 /// sum the rows of an image
 ///
-/// **Parameters**: 
+/// **Parameters**:
 ///
 /// * `image_data`: the image data in row-major format
 /// * `nrows`: the number of rows in the image
 /// * `ncols`: the number of columns in the image
 /// * `sums`: an out buffer into which the resulting
-///    sums are placed. Must have space 
+///    sums are placed. Must have space
 ///    for exactly `nrows` elements
-fn sum_image_rows(
-  image_data: &[f32],
-  nrows: u32,
-  ncols: u32,
-  sums: &mut [f32]) -> Result<(),String> {
-    todo!()
-}
+fn sum_image_rows_pos(
+    image_data: &[f32],
+    nrows: u32,
+    ncols: u32,
+    sums: &mut [f32],
+) -> Result<(), String> {}
 ```
 
 ⚠️  **Renaming** the macros exported from this crate (`use ... as ...`) or renaming the
