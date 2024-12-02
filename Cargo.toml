@@ -1,12 +1,12 @@
 [package]
-name = "roxygen"
+name = "docpos"
 version = "1.0.3"
 edition = "2021"
-authors = ["geo-ant"]
+authors = ["geo-ant","eugenesvk"]
 license = "MIT"
-homepage = "https://github.com/geo-ant/roxygen"
-repository = "https://github.com/geo-ant/roxygen"
-description = "Seamlessly document function parameters with rustdoc"
+homepage = "https://github.com/eugenesvk/docpos"
+repository = "https://github.com/eugenesvk/docpos"
+description = "Compact-document items after defining them + document function parameters with rustdoc (fork of roxygen)"
 readme = "Readme.md"
 categories = ["rust-patterns","development-tools"]
 keywords = ["document", "function", "parameters", "arguments", "doxygen"]
