@@ -1,6 +1,6 @@
 use roxygen::*;
 
-#[argdocpos]
+#[docpos]
 /// fnPre line 1.
 /// fnPre line 2.
 #[parameters_section]
