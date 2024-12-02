@@ -1,7 +1,7 @@
 use crate::Attribute;
 
-const DOCPOS_CRATE: &str = "docpos";
-const DOCPOS_MACRO: &str = "docpos";
+pub const DOCPOS_CRATE: &str = "docpos";
+pub const DOCPOS_MACRO: &str = "docpos";
 
 /// check whether an attribute is the raw #[argdocpos] main attribute.
 #[inline(always)]pub fn is_docpos_main(attr: &Attribute) -> bool {
