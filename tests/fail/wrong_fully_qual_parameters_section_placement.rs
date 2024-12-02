@@ -2,7 +2,7 @@
 /// this arguments section should not be here
 #[docpos::parameters_section]
 /// and some more
-#[docpos::docpos]
+#[docpos::roxygen]
 pub fn add(
     /// some comments
     first: i32,
