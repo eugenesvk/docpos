@@ -165,3 +165,4 @@ measured it... so take it with a grain of sodium-chloride.
   - waste of space in the output: for structs and enums, the default doc sections persists even though it has no comments
   - unrealized potential to waste less space in the output: short comments could've been "inlined" to the function signature as regular comments instead of having the whole new section
   - rather limited support: functions (parameters and generics), structs (fields), enums (variants)
+  - invalid enum variant's visibility qualifiers `enum Vis {pub V1}` are not rejected due to [syn design decision](https://stackoverflow.com/a/75356349)
