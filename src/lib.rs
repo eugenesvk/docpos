@@ -23,7 +23,7 @@
 //! All types of generic arguments, including lifetimes and const-generics
 //! can be documented like this.
 use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, ItemEnum, LitStr};
+use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, ItemEnum, Ident};
 use util::{
     extract_documented_generics, extract_documented_parameters, extract_fn_doc_attrs, make_doc_block,
     extract_struct_doc_attrs
@@ -121,6 +121,22 @@ pub fn roxygen(
         #function
     }
     .into()
+}
+
+use syn::Result;
+use syn::ext::IdentExt;
+use syn::parse::{Parse,ParseStream};
+use core::fmt;
+#[derive(Debug)]
+struct IdentAny {pub ident:String}
+impl fmt::Display for IdentAny {fn fmt   (&self, f: &mut fmt::Formatter) -> fmt::Result {write!(f, "{}", self.ident)}}
+impl AsRef<str>   for IdentAny {fn as_ref(&self                        ) -> &str        {               &self.ident}}
+impl Parse        for IdentAny {fn parse(input:ParseStream) -> Result<IdentAny> {
+    let lookahead = input.lookahead1();
+    if  lookahead.peek(Ident::peek_any) {
+        let name = input.call(Ident::parse_any)?;
+        Ok(Self {ident:name.to_string()})
+    } else {Err(lookahead.error())}  }
 }
 
 #[proc_macro_attribute]
