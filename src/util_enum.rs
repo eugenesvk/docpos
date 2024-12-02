@@ -24,15 +24,14 @@ pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attrib
   let (lower, upper) = args.size_hint();
   let mut doc_fields = Vec::<DocumentedIdent>::with_capacity(upper.unwrap_or(lower));
 
-  let mut docs0enum:Option<Vec::<Attribute>> = None;
+  let mut docs0enum  :Option<Vec::<Attribute>> = None;
   let mut id_prev    :Option<     &Ident     > = None;
   let mut id_last    :Option<     &Ident     > = None;
   let mut id_only    :Option<     &Ident     > = None;
   let mut docs_last  :       Vec::<Attribute> = vec![];
   for (pos,arg) in args.with_position() {
     let id = &arg.ident;
-    let docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" f1→f1 doc"
-    // println!("arg.ty={:#?}",arg);
+    let docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" var→var1 doc"
     if !docs.is_empty() {
       match pos {
         IPos::Only   => {id_only = Some(id); docs_last = docs;break;},// can be ///! split; break to avoid wrong id_prev
@@ -41,24 +40,13 @@ pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attrib
         IPos::Last   => {id_last = Some(id); docs_last = docs;break;},// can be ///! split; break to avoid wrong id_prev
         } // ↓ don't set on last item, break before
     }; id_prev = Some(id); // save id even without docs since next docs might need to be split-attached to it
-  }
-  if        let Some(id_last) = id_last { // on ///! split the docs between 2 fields, removing !
-    let (docs2prev,docs2last) = split_doc_in2(docs_last);
-    if ! docs2last.is_empty() {
-      if let Some(mut docum_field_prev) = doc_fields.pop() { // replace last-1 item's docs with its pre-///! docs
-        docum_field_prev.docs = docs2prev;
-        doc_fields.push(docum_field_prev);
-        doc_fields.push(DocumentedIdent::new(id_last, docs2last));
-      } else {                                               // add     last-i item's docs …
-        doc_fields.push(DocumentedIdent::new(id_prev.expect("saved prev ident"), docs2prev));
-        doc_fields.push(DocumentedIdent::new(id_last, docs2last));
-      }
-    }
-  } else if let Some(id_only) = id_only { // on ///! split the docs between enum and field, removing !
-    let (docs2enum,docs2field) = split_doc_in2(docs_last);
-    if ! docs2enum.is_empty() {                docs0enum = Some(docs2enum);}
-    if ! docs2field .is_empty() {
-        doc_fields.push(DocumentedIdent::new(id_only, docs2field));}
+  } // on ///! split the docs between 2 fields, removing !
+  if        let Some(id_last) = id_last {let (doc2prev,doc2last) = split_doc_in2(docs_last);
+    if ! doc2prev.is_empty () {doc_fields.push(DocumentedIdent::new(id_prev.expect("saved prev id"), doc2prev ));} // add last-1 variants docs
+    if ! doc2last.is_empty () {doc_fields.push(DocumentedIdent::new(id_last                        , doc2last ));} // pos-///! → last variant
+  } else if let Some(id_only) = id_only {let (doc2enum,doc2field) = split_doc_in2(docs_last);
+    if ! doc2enum .is_empty() {                                                     docs0enum = Some(doc2enum ) ;}
+    if ! doc2field.is_empty() {doc_fields.push(DocumentedIdent::new(id_only                        , doc2field));} // pos-///! →     variant
   }
   Ok((docs0enum,doc_fields))
 }
