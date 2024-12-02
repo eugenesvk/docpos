@@ -1,6 +1,7 @@
 use crate::*;
 use crate::util::make_doc_block;
 use crate::try2 as try2;
+use crate::util_strct::extract_doc_fields_shift_up;
 use quote::quote;
 use syn::{Attribute, ItemStruct};
 
