@@ -141,16 +141,16 @@ impl Parse        for IdentAny {fn parse(input:ParseStream) -> Result<IdentAny> 
 
 #[proc_macro_attribute]
 /// the principal attribute inside this crate that lets us document function or struct arguments, but after them, not before
-/// Allows either `#[docpos("struct")]` (or "fn") string syntax or just `#[docpos]` for autodetection
-pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos("arg") would be Literal
+/// Allows either `#[docpos(struct)]` (or 'fn', 'enum') literal syntax or just `#[docpos]` for autodetection
+pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(arg) would be Ident (though keywords can't be parsed by def)
     ,         item: proc_macro::TokenStream,
     )            -> proc_macro::TokenStream {
-    match syn::parse::<LitStr>(attr) {
-        Ok (lit_str) => {match lit_str.value().as_ref() { // 1 Parse "string" arguments first
+    match syn::parse::<IdentAny>(attr) {
+        Ok (id)      => {match id.to_string().as_ref() {// 1 Parse 'ident' arguments first
             "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
             "enum"   => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
             "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
-            _        => {let errmsg=format!("Expected either 'struct','fn','enum', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
+            _        => {let errmsg=format!("Expected either 'struct','fn','enum', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",id);
                 return  quote! {compile_error!(#errmsg)}.into();}
         }},
         Err(_err   ) => {let (e_struct, e_enum, e_fn);            // 2 Detect via parsing the item
