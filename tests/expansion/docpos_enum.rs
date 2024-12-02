@@ -14,7 +14,7 @@ pub enum EnumyPos { /// enumPos line1
 
 
 #[docpos]
-pub enum EnumyPos { /// enumPos line1
+pub enum EnumyPos2 { /// enumPos line1
                     /// enumPos line2
   pub V1	,/// v1→v1 line 1
         	 /// v1→v1 line 2
