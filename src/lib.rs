@@ -120,16 +120,11 @@ pub fn roxygen(
     .into()
 }
 
-#[proc_macro_attribute]
-/// the principal attribute inside this crate that lets us document function arguments, but after them, not before
-pub fn argdocpos(_attr: proc_macro::TokenStream
-    ,            item : proc_macro::TokenStream,
-    )                -> proc_macro::TokenStream {
-    let mut function: ItemFn = parse_macro_input!(item as ItemFn);
-
+/// Document function arguments, but after them, not before
+fn docpos_fn(mut function:ItemFn) -> proc_macro::TokenStream {
     try2!(function.attrs.iter_mut().try_for_each(|attr| {
-        if is_argdocpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
-        } else                     {Ok(())}}));
+        if is_docpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
+        } else                  {Ok(())}}));
 
     let function_docs = try2!(extract_fn_doc_attrs(&mut function.attrs)); // extrac the doc attributes on the function itself
 
