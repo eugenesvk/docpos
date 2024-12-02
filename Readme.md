@@ -163,4 +163,6 @@ times much (after this crate was compiled once), but I haven't
 measured it... so take it with a grain of sodium-chloride.
 
 ### Known issues
-  - for structs and enums, the default no-comment section persists in the docs
+  - waste of space in the output: for structs and enums, the default doc sections persists even though it has no comments
+  - unrealized potential to waste less space in the output: short comments could've been "inlined" to the function signature as regular comments instead of having the whole new section
+  - rather limited support: functions (parameters and generics), structs (fields), enums (variants)
