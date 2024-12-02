@@ -46,7 +46,7 @@ Similarly, for a function, you can add doc-comments to parameters:
 ```rust
 use docpos::*;
 
-#[argdocpos]
+#[docpos]
 fn sum_image_rows_pos( /// sum the rows of an image
   image_data: &    [f32], /// the image data in row-major format
   nrows     :       u32 , /// the number of rows in the image
