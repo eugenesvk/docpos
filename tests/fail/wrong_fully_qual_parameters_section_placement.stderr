@@ -2,5 +2,5 @@ error: The #[roxygen] attribute must come before the parameters_section attribut
        Place it before any of the doc comments for the function.
  --> tests/fail/wrong_fully_qual_parameters_section_placement.rs:5:1
   |
-5 | #[roxygen::roxygen]
-  | ^^^^^^^^^^^^^^^^^^^
+5 | #[docpos::roxygen]
+  | ^^^^^^^^^^^^^^^^^^
