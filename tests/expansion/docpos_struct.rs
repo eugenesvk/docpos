@@ -1,6 +1,6 @@
 use docpos::*;
 
-#[docpos("struct")]
+#[docpos(struct)]
 /// structPre line 1.
 /// structPre line 2.
 pub struct StructyPos { /// scructInner

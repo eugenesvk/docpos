@@ -1,6 +1,6 @@
 use docpos::*;
 
-#[docpos("fn")]
+#[docpos(fn)]
 /// fn_Pre
 pub fn tst( /// fn_Pos
   par1: f32, /// par1→par1

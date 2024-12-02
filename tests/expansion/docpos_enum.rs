@@ -1,6 +1,6 @@
 use docpos::*;
 
-#[docpos("enum")]
+#[docpos(enum)]
 enum EnumyPos { /// enumPos line1
                 /// enumPos line2
   V1	,/// v1→v1 line 1

@@ -7,7 +7,7 @@ pub fn tst( /// fn_Pos
   par1: f32,
 ) {}
 
-#[docpos("fn")]
+#[docpos(fn)]
 /// fn_Pre
 pub fn tst2( /// fn_Pos
   ///!          fn→par1

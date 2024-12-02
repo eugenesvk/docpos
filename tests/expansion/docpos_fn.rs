@@ -1,6 +1,6 @@
 use docpos::*;
 
-#[docpos("fn")]
+#[docpos(fn)]
 fn foo( /// fnInner line 1
   /// fnInner line 2
   // regular comment

@@ -11,7 +11,7 @@ fn foo( /// fnInnter after the arguments section
   _undocumented	: i32   	,
 ) -> bool {p2.len() > p1 as usize}
 
-#[docpos("fn")]
+#[docpos(fn)]
 /// fnOuter line 1
 /// fnOuter line 2
 #[parameters_section]
