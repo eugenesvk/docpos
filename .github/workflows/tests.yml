@@ -8,6 +8,17 @@ on:
   schedule:
     # Runs the workflow at 00:00 on the first day of every month
     - cron: '0 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description : 'Log level'
+        required    : true
+        default     : 'warning'
+        type        : choice
+        options     :
+        - info
+        - warning
+        - debug
 
 env:
   CARGO_TERM_COLOR: always
