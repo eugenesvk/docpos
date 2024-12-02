@@ -312,7 +312,6 @@ pub fn extract_documented_generics_shift_up(generics: &'_ mut Generics,) -> Resu
             syn::GenericParam::Type    (ty ) => (&ty          .ident, &mut ty .attrs), // id=T
             syn::GenericParam::Const   (con) => (&con         .ident, &mut con.attrs), // id=N
         };
-        println!("attrs = {attrs:?}");
         let mut docs = extract_doc_attrs(attrs);
         if !docs.is_empty() {
             match pos {
