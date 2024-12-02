@@ -39,7 +39,7 @@ pub struct StructyPre {
 }
 ```
 
-Macro can be used with an explicit argument `#[docpos("struct")]` or let the macro try each supported type via `#[docpos]`, though the latter will generate errors for each type.
+Macro can be used with an explicit argument `#[docpos(struct)]` (`enum`,`fn`) or let the macro try each supported type via `#[docpos]`, though the latter will generate errors for each type.
 
 Similarly, for a function, you can add doc-comments to parameters:
 
