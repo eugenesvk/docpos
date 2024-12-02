@@ -6,10 +6,10 @@ use docpos::*;
 #[parameters_section]
 /// fnPre line 3 after the parameters/generics section
 fn with_lifetimes</// pre-a-lifetime (preserved)
-  'a 	,/// pos-a-lifetime
-  S  	,/// documentation for parameter S
-  ///	     spans multiple lines
-  T  	,/// T self
+  'a	,/// pos-a-lifetime
+  S 	,/// documentation for parameter S
+    	 /// spans multiple lines
+  T 	,/// T self
        ///! T→N const generic
   const N: usize,>(/// fnInner
   par1: u32,
