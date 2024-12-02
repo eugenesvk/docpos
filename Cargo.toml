@@ -1,30 +1,30 @@
 [package]
-name = "docpos"
-version = "1.0.3"
-edition = "2021"
-authors = ["geo-ant","eugenesvk"]
-license = "MIT"
-homepage = "https://github.com/eugenesvk/docpos"
-repository = "https://github.com/eugenesvk/docpos"
-description = "Compact-document items after defining them + document function parameters with rustdoc (fork of roxygen)"
-readme = "Readme.md"
-categories = ["rust-patterns","development-tools"]
-keywords = ["document", "function", "parameters", "arguments", "doxygen"]
+name       	= "docpos"
+version    	= "1.0.3"
+edition    	= "2021"
+authors    	= ["geo-ant","eugenesvk"]
+license    	= "MIT"
+homepage   	= "https://github.com/eugenesvk/docpos"
+repository 	= "https://github.com/eugenesvk/docpos"
+description	= "Compact-document items after defining them + document function parameters with rustdoc (fork of roxygen)"
+readme     	= "Readme.md"
+categories 	= ["rust-patterns","development-tools"]
+keywords   	= ["document", "function", "parameters", "arguments", "doxygen"]
 
 [badges]
-maintenance = { status = "passively-maintained" }
+maintenance = {status="passively-maintained"}
 
 [lib]
 proc-macro = true
 
 [dependencies]
-quote = "1"
-proc-macro2 = "1.0"
-syn = {version="2.0",features=["parsing","full"]}
-itertools = "0.13.0"
-indoc = "2.0.5"
+quote      	= "1"
+proc-macro2	= "1.0"
+syn        	= {version="2.0",features=["parsing","full"]}
+itertools  	= "0.13.0"
+indoc      	= "2.0.5"
 
 [dev-dependencies]
-trybuild = "1.0"
-macrotest = "1.0"
-cargo-expand = "1.0.95"
+trybuild    	= "1.0"
+macrotest   	= "1.0"
+cargo-expand	= "1.0.95"
