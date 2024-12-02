@@ -1,5 +1,3 @@
-#![cfg_attr(not(debug_assertions),allow(non_snake_case,non_upper_case_globals,non_camel_case_types))]
-#![cfg_attr(    debug_assertions ,allow(non_snake_case,non_upper_case_globals,non_camel_case_types,unused_imports,unused_mut,unused_variables,dead_code,unused_assignments,unused_macros))]
 use crate::util::split_doc_in2;
 use crate::util::{DocumentedIdent, extract_doc_attrs};
 use crate::is_parameters_section;
