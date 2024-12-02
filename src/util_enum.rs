@@ -15,7 +15,7 @@ use itertools::{Itertools, Position as IPos};
 /// enum EnumyPos { /// this comment belongs to the enum, not to the next variant, so will be returned separately
 ///  image_data,/// this comment belongs to the preceding `image_data` variant, not `nrows`
 ///  nrows     ,/// this part of the comment belongs to `nrows`
-///                             ///! but this part — to the last `ncols` variant
+///             ///! but this part — to the last `ncols` variant
 ///  ncols     ,// it's a syntax error to add doc comments at the end
 /// }
 pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribute>>,Vec<DocumentedIdent<'a>>), syn::Error>
