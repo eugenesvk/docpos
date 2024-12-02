@@ -27,4 +27,3 @@ indoc      	= "2.0.5"
 [dev-dependencies]
 trybuild    	= "1.0"
 macrotest   	= "1.0"
-cargo-expand	= "1.0.95"
