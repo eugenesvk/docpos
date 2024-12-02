@@ -15,11 +15,11 @@ use std::path::PathBuf;
 use docpos::*;
 
 #[docpos] pub struct StructyPos { /// "inner" scruct docs
-  pub field1       	:        String  	,/// pos-doc for `field1` (in regular Rust this would be a doc for `field2_longer`)
-  pub field2_longer	: Option<String> 	,/// pos-doc for `field2_longer`
-                   	                 	 /// pos-doc for `field2_longer` line 2
-                   	                 	 ///! pre-doc for `paths` at `field2_longer` (after `///!`)
-  pub paths        	: Vec   <PathBuf>	, // no doc comments allowed here, use `///!` in the previous field
+  pub field1       :        String  ,/// pos-doc for `field1` (in regular Rust this would be a doc for `field2_longer`)
+  pub field2_longer: Option<String> ,/// pos-doc for `field2_longer`
+                                     /// pos-doc for `field2_longer` line 2
+                                     ///! pre-doc for `paths` at `field2_longer` (after `///!`)
+  pub paths        : Vec   <PathBuf>, // no doc comments allowed here, use `///!` in the previous field
 }
 ```
 instead of 
