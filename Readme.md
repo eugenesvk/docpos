@@ -1,4 +1,6 @@
-# roxygen - documenting function parameters
+# docpos - compact-documenting items after defining them: functions, structs, enums…
+
+(a fork of the "passively-maintained" `roxygen` with a few more supported items and allowing for a pos-position)
 
 ![build](https://github.com/geo-ant/roxygen/actions/workflows/build.yml/badge.svg?branch=main)
 ![tests](https://github.com/geo-ant/roxygen/actions/workflows/tests.yml/badge.svg?branch=main)
@@ -6,34 +8,41 @@
 [![crates](https://img.shields.io/crates/v/roxygen)](https://crates.io/crates/roxygen)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
-The `#[roxygen]` attribute allows you to add doc-comments to function
-parameters, which is a _compile error_ in current Rust. Generic lifetimes,
-types, and constants of the function [can also be documented](https://docs.rs/roxygen/latest/roxygen/). 
-You can now write
+The `#[docpos]` attribute allows you to add doc-comments after an item, not before (as in regular Rust) in enums and structs, and also document function parameters (a _compile error_ in current Rust). Generic lifetimes, types, and constants of the function [can also be documented](https://docs.rs/roxygen/latest/roxygen/). 
 
+You can now write a much more readable and compact table:
 ```rust
+use std::path::PathBuf;
 use roxygen::*;
 
-#[roxygen]
-/// sum the rows of an image
-fn sum_image_rows(
-  /// the image data in row-major format
-  image_data: &[f32],
-  /// the number of rows in the image
-  nrows: u32,
-  /// the number of columns in the image
-  ncols: u32,
-  /// an out buffer into which the resulting
-  /// sums are placed. Must have space 
-  /// for exactly `nrows` elements
-  sums: &mut [f32]) -> Result<(),String> {
-    todo!()
-} 
+#[docpos] pub struct StructyPos { /// "inner" scruct docs
+  pub field1       	:        String  	,/// pos-doc for `field1` (in regular Rust this would be a doc for `field2_longer`)
+  pub field2_longer	: Option<String> 	,/// pos-doc for `field2_longer`
+                   	                 	 /// pos-doc for `field2_longer` line 2
+                   	                 	 ///! pre-doc for `paths` at `field2_longer` (after `///!`)
+  pub paths        	: Vec   <PathBuf>	, // no doc comments allowed here, use `///!` in the previous field
+}
+```
+instead of 
+```rust
+use std::path::PathBuf;
+
+/// "Outer" scruct docs wasting a line
+pub struct StructyPre {
+  /// pre-doc for `field1`, another line wasted on a short comment
+  pub field1: String	,
+  /// pre-doc for `field2_longer`, breaking the vertical flow of fields
+  /// pre-doc for `field2_longer`, making the disconnect bigger
+  pub field2_longer: Option<String>,
+  /// pre-doc for `paths`
+  pub paths: Vec<PathBuf>,
+  // oh, and it's not vertically aligned anymore since you can't use an elastic-tabstoppy plugin to help with that
+}
 ```
 
-The `#[argdocpos]` attribute allows you to add doc-comments to function
-parameters, but _after_ the parameters.
-You can now write
+Macro can be used with an explicit argument `#[docpos("struct")]` or let the macro try each supported type via `#[docpos]`, though the latter will generate errors for each type.
+
+Similarly, for a function, you can add doc-comments to parameters:
 
 ```rust
 use roxygen::*;
@@ -52,6 +61,8 @@ fn sum_image_rows_pos( /// sum the rows of an image
     todo!()
 } 
 ```
+
+(Or use the main roxygen's crate macro for reguler pre-doc-comment support)
 
 You have to document at least one parameter (or generic), but you don't have
 to document all of them. The example above will produce documentation as 
@@ -150,3 +161,6 @@ introduces no additional code. Thus, it doesn't
 make your actual code more or less complex and should not affect compile
 times much (after this crate was compiled once), but I haven't
 measured it... so take it with a grain of sodium-chloride.
+
+### Known issues
+  - for structs and enums, the default no-comment section persists in the docs
