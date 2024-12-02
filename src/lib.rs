@@ -36,8 +36,12 @@ use util::{
 };
 use proc_macro::{TokenTree,Literal};
 use util_strct::extract_doc_fields_shift_up;
+use docpos_struct::docpos_fn;
+use helper::*;
 mod util;
+mod helper;
 mod util_strct;
+mod docpos_struct;
 
 use indoc::formatdoc;
 
@@ -48,15 +52,20 @@ const ROXYGEN_CRATE: &str = "roxygen";
 /// the name of the main macro in this crate
 const ROXYGEN_MACRO: &str = ROXYGEN_CRATE;
 
-// helper macro "try" on a syn::Error, so that we can return it as a token stream
-macro_rules! try2 {
-    ($ex:expr) => {
-        match $ex {
-            Ok(val) => val,
-            Err(err) => return err.into_compile_error().into(),
-        }
-    };
+const ROXYGEN_MACRO: &str = ROXYGEN_CRATE;
+mod mhelp {
+  // helper macro "try" on a syn::Error, so that we can return it as a token stream
+    macro_rules! try2 {
+        ($ex:expr) => {
+            match $ex {
+                Ok(val) => val,
+                Err(err) => return err.into_compile_error().into(),
+            }
+        };
+    }
+    pub(crate) use try2;
 }
+use mhelp::try2 as try2;
 
 #[proc_macro_attribute]
 /// the principal attribute inside this crate that lets us document function arguments
@@ -233,6 +242,3 @@ fn is_roxygen_main(attr: &Attribute) -> bool {
             && path.segments[1].ident == ROXYGEN_MACRO
     }
 }
-
-/// check whether an attribute is the raw #[argdocpos] main attribute.
-#[inline(always)]fn is_docpos_main(attr: &Attribute) -> bool {attr.path().is_ident("docpos")}
