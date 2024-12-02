@@ -156,6 +156,27 @@ fn docpos_fn(mut function:ItemFn) -> proc_macro::TokenStream {
 }
 
 #[proc_macro_attribute]
+/// the principal attribute inside this crate that lets us document function or struct arguments, but after them, not before
+/// Allows either `#[docpos("struct")]` (or "fn") string syntax or just `#[docpos]` for autodetection
+pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos("arg") would be Literal
+    ,         item: proc_macro::TokenStream,
+    )            -> proc_macro::TokenStream {
+    match syn::parse::<LitStr>(attr) {
+        Ok (lit_str) => {match lit_str.value().as_ref() { // 1 Parse "string" arguments first
+            "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
+            "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
+            _        => {let errmsg=format!("Expected either 'struct' or 'fn', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
+                return  quote! {compile_error!(#errmsg)}.into();}
+        }},
+        Err(err    ) => {let (e_struct, e_fn);            // 2 Detect via parsing the item
+            match syn::parse::<ItemStruct>(item.clone()) {Ok(item)=>{return docpos_struct(item)}, Err(err)=>{e_struct=err},};
+            match syn::parse::<ItemFn    >(item        ) {Ok(item)=>{return docpos_fn    (item)}, Err(err)=>{e_fn    =err},};
+            let errmsg = formatdoc!(r#"Parsing ℯ as
+                Struct: {e_struct},
+                Fn    : {e_fn}"#);                                   return quote!{compile_error!(#errmsg)}.into();
+        }
+    }
+}
 
 /// Document struct arguments, but after them, not before
 fn docpos_struct(mut strct:ItemStruct) -> proc_macro::TokenStream {
@@ -249,5 +270,4 @@ fn is_roxygen_main(attr: &Attribute) -> bool {
 }
 
 /// check whether an attribute is the raw #[argdocpos] main attribute.
-#[inline(always)]fn is_argdocpos_main   (attr: &Attribute) -> bool {attr.path().is_ident("argdocpos"   )}
-#[inline(always)]fn is_structdocpos_main(attr: &Attribute) -> bool {attr.path().is_ident("structdocpos")}
+#[inline(always)]fn is_docpos_main(attr: &Attribute) -> bool {attr.path().is_ident("docpos")}
