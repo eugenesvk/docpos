@@ -1,11 +1,10 @@
 # docpos - compact-documenting items after defining them: functions, structs, enums…
 
-(a fork of the "passively-maintained" `roxygen` with a few more supported items and allowing for a pos-position)
+(a fork of the "passively-maintained" [roxygen](https://github.com/geo-ant/roxygen) with a few more supported items and allowing for a pos-position)
 
-![build](https://github.com/geo-ant/roxygen/actions/workflows/build.yml/badge.svg?branch=main)
-![tests](https://github.com/geo-ant/roxygen/actions/workflows/tests.yml/badge.svg?branch=main)
-![lints](https://github.com/geo-ant/roxygen/actions/workflows/lints.yml/badge.svg?branch=main)
-[![crates](https://img.shields.io/crates/v/roxygen)](https://crates.io/crates/roxygen)
+![build](https://github.com/eugenesvk/docpos/actions/workflows/build.yml/badge.svg?branch=main)
+![tests](https://github.com/eugenesvk/docpos/actions/workflows/tests.yml/badge.svg?branch=main)
+[![crates](https://img.shields.io/crates/v/docpos)](https://crates.io/crates/docpos)
 ![maintenance-status](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg)
 
 The `#[docpos]` attribute allows you to add doc-comments after an item, not before (as in regular Rust) in enums and structs, and also document function parameters (a _compile error_ in current Rust). Generic lifetimes, types, and constants of the function [can also be documented](https://docs.rs/roxygen/latest/roxygen/). 
@@ -13,7 +12,7 @@ The `#[docpos]` attribute allows you to add doc-comments after an item, not befo
 You can now write a much more readable and compact table:
 ```rust
 use std::path::PathBuf;
-use roxygen::*;
+use docpos::*;
 
 #[docpos] pub struct StructyPos { /// "inner" scruct docs
   pub field1       	:        String  	,/// pos-doc for `field1` (in regular Rust this would be a doc for `field2_longer`)
@@ -45,7 +44,7 @@ Macro can be used with an explicit argument `#[docpos("struct")]` or let the mac
 Similarly, for a function, you can add doc-comments to parameters:
 
 ```rust
-use roxygen::*;
+use docpos::*;
 
 #[argdocpos]
 fn sum_image_rows_pos( /// sum the rows of an image
@@ -62,7 +61,7 @@ fn sum_image_rows_pos( /// sum the rows of an image
 } 
 ```
 
-(Or use the main roxygen's crate macro for reguler pre-doc-comment support)
+(Or use the main roxygen's crate macro `roxygen` for reguler pre-doc-comment support)
 
 You have to document at least one parameter (or generic), but you don't have
 to document all of them. The example above will produce documentation as 
@@ -98,12 +97,12 @@ of the top-level function documentation. However, this crate allows to explicitl
 place the section by using a custom attribute like so:
 
 ```rust
-use roxygen::roxygen;
+use docpos::roxygen;
 
 #[roxygen]
 /// long documention
 /// ...
-#[roxygen::parameters_section]
+#[docpos::parameters_section]
 /// # Examples
 /// ...
 fn foo(
@@ -154,7 +153,7 @@ function parameters.
 ### Compile Times
 
 Macros will always increase your compile time to some degree, but I don't think
-this is a giant issue (after the roxygen dependency itself was compiled, that is):
+this is a giant issue (after the docpos dependency itself was compiled, that is):
 firstly, this macro is to be used _sparingly_. Secondly, this macro just does 
 some light parsing and shuffling around of the documentation tokens. It 
 introduces no additional code. Thus, it doesn't
