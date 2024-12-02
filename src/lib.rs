@@ -134,7 +134,7 @@ pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(
             "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
             "enum"   => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
             "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
-            _        => {let errmsg=format!("Expected either 'struct' or 'fn', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
+            _        => {let errmsg=format!("Expected either 'struct','fn','enum', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
                 return  quote! {compile_error!(#errmsg)}.into();}
         }},
         Err(_err   ) => {let (e_struct, e_enum, e_fn);            // 2 Detect via parsing the item
