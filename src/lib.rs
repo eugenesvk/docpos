@@ -26,7 +26,7 @@
 //! All types of generic arguments, including lifetimes and const-generics
 //! can be documented like this.
 use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, Fields, Field, FieldsNamed, Token};
+use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, Fields, Field, FieldsNamed, Token, Lit, LitStr};
 use syn::punctuated::Pair::Punctuated;
 use util::{
     extract_documented_generics, extract_documented_parameters,
@@ -34,9 +34,12 @@ use util::{
     extract_struct_doc_attrs,
     DocumentedIdent
 };
+use proc_macro::{TokenTree,Literal};
 use util_strct::extract_doc_fields_shift_up;
 mod util;
 mod util_strct;
+
+use indoc::formatdoc;
 
 /// parameter section macro name
 const PARAM_SECTION: &str = "parameters_section";
