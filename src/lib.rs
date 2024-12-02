@@ -44,8 +44,6 @@ use indoc::formatdoc;
 
 /// parameter section macro name
 const PARAM_SECTION: &str = "parameters_section";
-/// the name of this crate
-const ROXYGEN_CRATE: &str = "roxygen";
 /// the name of the main macro in this crate
 const ROXYGEN_MACRO: &str = "roxygen";
 
@@ -187,7 +185,7 @@ fn is_parameters_section(attr: &Attribute) -> bool {
     } else {
         // checks for (::)roxygen::param_section
         path.segments.len() == 2
-            && path.segments[0].ident == ROXYGEN_CRATE
+            && path.segments[0].ident == DOCPOS_CRATE
             && path.segments[1].ident == PARAM_SECTION
     }
 }
@@ -204,7 +202,7 @@ fn is_roxygen_main(attr: &Attribute) -> bool {
     } else {
         // checks for (::)roxygen::roxygen
         path.segments.len() == 2
-            && path.segments[0].ident == ROXYGEN_CRATE
+            && path.segments[0].ident == DOCPOS_CRATE
             && path.segments[1].ident == ROXYGEN_MACRO
     }
 }
