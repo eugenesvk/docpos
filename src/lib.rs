@@ -26,15 +26,11 @@
 //! All types of generic arguments, including lifetimes and const-generics
 //! can be documented like this.
 use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, Fields, Field, FieldsNamed, Token, Lit, LitStr};
-use syn::punctuated::Pair::Punctuated;
+use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, LitStr};
 use util::{
-    extract_documented_generics, extract_documented_parameters,
-    extract_documented_generics_shift_up, extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block,
-    extract_struct_doc_attrs,
-    DocumentedIdent
+    extract_documented_generics, extract_documented_parameters, extract_fn_doc_attrs, make_doc_block,
+    extract_struct_doc_attrs
 };
-use proc_macro::{TokenTree,Literal};
 use util_strct::extract_doc_fields_shift_up;
 use docpos_fn::docpos_fn;
 use docpos_struct::docpos_struct;
@@ -143,7 +139,7 @@ pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(
             _        => {let errmsg=format!("Expected either 'struct' or 'fn', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
                 return  quote! {compile_error!(#errmsg)}.into();}
         }},
-        Err(err    ) => {let (e_struct, e_fn);            // 2 Detect via parsing the item
+        Err(_err   ) => {let (e_struct, e_fn);            // 2 Detect via parsing the item
             match syn::parse::<ItemStruct>(item.clone()) {Ok(item)=>{return docpos_struct(item)}, Err(err)=>{e_struct=err},};
             match syn::parse::<ItemFn    >(item        ) {Ok(item)=>{return docpos_fn    (item)}, Err(err)=>{e_fn    =err},};
             let errmsg = formatdoc!(r#"Parsing ℯ as
