@@ -36,12 +36,14 @@ use util::{
 };
 use proc_macro::{TokenTree,Literal};
 use util_strct::extract_doc_fields_shift_up;
-use docpos_struct::docpos_fn;
+use docpos_fn::docpos_fn;
+use docpos_struct::docpos_struct;
 use helper::*;
 mod util;
 mod helper;
 mod util_strct;
 mod docpos_struct;
+mod docpos_fn;
 
 use indoc::formatdoc;
 
@@ -52,7 +54,6 @@ const ROXYGEN_CRATE: &str = "roxygen";
 /// the name of the main macro in this crate
 const ROXYGEN_MACRO: &str = ROXYGEN_CRATE;
 
-const ROXYGEN_MACRO: &str = ROXYGEN_CRATE;
 mod mhelp {
   // helper macro "try" on a syn::Error, so that we can return it as a token stream
     macro_rules! try2 {
