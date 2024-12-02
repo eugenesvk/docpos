@@ -34,11 +34,13 @@ use util::{
 use util_strct::extract_doc_fields_shift_up;
 use docpos_fn::docpos_fn;
 use docpos_struct::docpos_struct;
+use docpos_enum::docpos_enum;
 use helper::*;
 mod util;
 mod helper;
 mod util_strct;
 mod docpos_struct;
+mod docpos_enum;
 mod docpos_fn;
 
 use indoc::formatdoc;
@@ -135,15 +137,18 @@ pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(
     match syn::parse::<LitStr>(attr) {
         Ok (lit_str) => {match lit_str.value().as_ref() { // 1 Parse "string" arguments first
             "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
+            "enum  " => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
             "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
             _        => {let errmsg=format!("Expected either 'struct' or 'fn', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
                 return  quote! {compile_error!(#errmsg)}.into();}
         }},
-        Err(_err   ) => {let (e_struct, e_fn);            // 2 Detect via parsing the item
+        Err(_err   ) => {let (e_struct, e_enum, e_fn);            // 2 Detect via parsing the item
             match syn::parse::<ItemStruct>(item.clone()) {Ok(item)=>{return docpos_struct(item)}, Err(err)=>{e_struct=err},};
+            match syn::parse::<ItemEnum  >(item.clone()) {Ok(item)=>{return docpos_enum  (item)}, Err(err)=>{e_enum  =err},};
             match syn::parse::<ItemFn    >(item        ) {Ok(item)=>{return docpos_fn    (item)}, Err(err)=>{e_fn    =err},};
             let errmsg = formatdoc!(r#"Parsing ℯ as
                 Struct: {e_struct},
+                Enum  : {e_enum},
                 Fn    : {e_fn}"#);                                   return quote!{compile_error!(#errmsg)}.into();
         }
     }
