@@ -1,11 +1,8 @@
-use crate::ItemStruct;
-use crate::extract_struct_doc_attrs;
-use crate::extract_doc_fields_shift_up;
-use quote::quote;
-use syn::{Attribute, ItemFn};
-use crate::util::{extract_documented_generics_shift_up, extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block};
+use crate::*;
+use crate::util::make_doc_block;
 use crate::try2 as try2;
-use crate::helper::*;
+use quote::quote;
+use syn::{Attribute, ItemStruct};
 
 
 /// Document struct arguments, but after them, not before
