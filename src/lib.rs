@@ -132,7 +132,7 @@ pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(
     match syn::parse::<LitStr>(attr) {
         Ok (lit_str) => {match lit_str.value().as_ref() { // 1 Parse "string" arguments first
             "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
-            "enum  " => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
+            "enum"   => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
             "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
             _        => {let errmsg=format!("Expected either 'struct' or 'fn', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",lit_str.value());
                 return  quote! {compile_error!(#errmsg)}.into();}
