@@ -24,11 +24,11 @@ pub fn extract_doc_fields_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribut
   let (lower, upper) = args.size_hint();
   let mut doc_fields = Vec::<DocumentedIdent>::with_capacity(upper.unwrap_or(lower));
 
-  let mut docs0struct:Option<Vec::<Attribute>> = None;
-  let mut id_prev    :Option<     &Ident     > = None;
-  let mut id_last    :Option<     &Ident     > = None;
-  let mut id_only    :Option<     &Ident     > = None;
-  let mut docs_last  :       Vec::<Attribute> = vec![];
+  let mut doc0struct:Option<Vec::<Attribute>> = None;
+  let mut id_prev   :Option<     &Ident     > = None;
+  let mut id_last   :Option<     &Ident     > = None;
+  let mut id_only   :Option<     &Ident     > = None;
+  let mut docs_last :       Vec::<Attribute> = vec![];
   for (pos,arg) in args.with_position() {
     if let Some(id) = &arg.ident { // ident:Some(Ident {ident: "f2",..}) some structs have no name
       let docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" f1→f1 doc"
@@ -36,7 +36,7 @@ pub fn extract_doc_fields_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribut
       if !docs.is_empty() {
         match pos {
           IPos::Only   => {id_only = Some(id); docs_last = docs;break;},// can be ///! split; break to avoid wrong id_prev
-          IPos::First  => {             docs0struct = Some(docs);     },// no ///! split needed, pre-field docs go to struct
+          IPos::First  => {             doc0struct = Some(docs);     },// no ///! split needed, pre-field docs go to struct
           IPos::Middle => {doc_fields.push(DocumentedIdent::new(id_prev.take().expect("saved prev id"), docs));},
           IPos::Last   => {id_last = Some(id); docs_last = docs;break;},// can be ///! split; break to avoid wrong id_prev
           } // ↓ don't set on last item, break before
