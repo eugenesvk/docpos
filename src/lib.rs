@@ -26,12 +26,11 @@
 //! All types of generic arguments, including lifetimes and const-generics
 //! can be documented like this.
 use quote::{quote, ToTokens};
-use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, LitStr};
+use syn::{parse_macro_input, Attribute, ItemFn, ItemStruct, ItemEnum, LitStr};
 use util::{
     extract_documented_generics, extract_documented_parameters, extract_fn_doc_attrs, make_doc_block,
     extract_struct_doc_attrs
 };
-use util_strct::extract_doc_fields_shift_up;
 use docpos_fn::docpos_fn;
 use docpos_struct::docpos_struct;
 use docpos_enum::docpos_enum;
@@ -39,6 +38,7 @@ use helper::*;
 mod util;
 mod helper;
 mod util_strct;
+mod util_enum;
 mod docpos_struct;
 mod docpos_enum;
 mod docpos_fn;
