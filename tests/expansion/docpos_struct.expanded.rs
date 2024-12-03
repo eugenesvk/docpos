@@ -2,24 +2,18 @@ use docpos::*;
 /// structPre line 1.
 /// structPre line 2.
 /// scructInner
-///
-/// **Fields**:
-///
-/// * `x`: doc @ x for x
-/// * `y`: doc @ x for y (after `///!`)
 pub struct StructyPos {
+    /// doc @ x for x
     pub x: i8,
+    /// doc @ x for y (after `///!`)
     pub y: i8,
 }
 /// structPre line 1.
 /// structPre line 2.
 /// scructInner
-///
-/// **Fields**:
-///
-/// * `x`: doc @ x for x
-/// * `y`: doc @ x for y (after `///!`)
 pub struct StructyPos2 {
+    /// doc @ x for x
     pub x: i8,
+    /// doc @ x for y (after `///!`)
     pub y: i8,
 }
