@@ -24,11 +24,11 @@ pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attrib
   let (lower, upper) = args.size_hint();
   let mut doc_fields = Vec::<DocumentedIdent>::with_capacity(upper.unwrap_or(lower));
 
-  let mut docs0enum  :Option<Vec::<Attribute>> = None;
-  let mut id_prev    :Option<     &Ident     > = None;
-  let mut id_last    :Option<     &Ident     > = None;
-  let mut id_only    :Option<     &Ident     > = None;
-  let mut docs_last  :       Vec::<Attribute> = vec![];
+  let mut docs0enum	:Option<Vec::<Attribute>>	= None;
+  let mut id_prev  	:Option<     &Ident     >	= None;
+  let mut id_last  	:Option<     &Ident     >	= None;
+  let mut id_only  	:Option<     &Ident     >	= None;
+  let mut docs_last	:       Vec::<Attribute> 	= vec![];
   for (pos,arg) in args.with_position() {
     let id = &arg.ident;
     let docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" var→var1 doc"
