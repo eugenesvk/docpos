@@ -34,7 +34,7 @@ use docpos_enum::docpos_enum;
 use helper::*;
 mod util;
 mod helper;
-mod util_strct;
+mod util_struct;
 mod util_fn;
 mod util_enum;
 mod docpos_struct;
