@@ -84,6 +84,38 @@ fn sum_image_rows_pos(
 ) -> Result<(), String> {}
 ```
 
+#### Enums
+```rs
+#[docpos(enum)] // or #[docpos] for auto-detection
+enum EnumyPos { /// enumPos line1
+                /// enumPos line2
+  V1	,/// v1→v1 line 1
+    	 /// v1→v1 line 2
+  V2	,/// v2→v2 line 1
+  V3	,// won't be shown
+  V4	,// won't be shown
+    	 ///! v4→v5 line 1
+  V5	,//
+}
+```
+Replaces
+```rs
+/// enumPos line1
+/// enumPos line2
+enum EnumyPos {
+    /// v1→v1 line 1
+    /// v1→v1 line 2
+    V1,
+    /// v2→v2 line 1
+    V2,
+    V3,
+    V4,
+    /// v4→v5 line 1
+    V5,
+}
+```
+Though here the expansion results is exactly this, without a separate section like for function parameters, since even when all docs are removed by the macro for manual formatting, the default `Variants` section remains (use `#[docpos(enum_sect)]` to force an explicit section)
+
 ⚠️  **Renaming** the macros exported from this crate (`use ... as ...`) or renaming the
 crate itself (in your `Cargo.toml`) will make all of this stop working properly.
 
