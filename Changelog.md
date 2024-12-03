@@ -21,3 +21,5 @@ All notable changes to this project will be documented in this file
 
 [0.1.0]: https://github.com/eugenesvk/docpos/releases/tag/0.1.0
 ## [0.1.0]
+- ✨ __Added__
+  + Support for `enum` and `struct`
