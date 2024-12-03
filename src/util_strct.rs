@@ -32,7 +32,6 @@ pub fn extract_doc_fields_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribut
   for (pos,arg) in args.with_position() {
     if let Some(id) = &arg.ident { // ident:Some(Ident {ident: "f2",..}) some structs have no name
       let docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" f1→f1 doc"
-      // println!("arg.ty={:#?}",arg);
       if !docs.is_empty() {
         match pos {
           IPos::Only   => {id_only = Some(id); docs_last = docs;break;},// can be ///! split; break to avoid wrong id_prev
