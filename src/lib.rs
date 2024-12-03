@@ -147,17 +147,18 @@ pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(
     ,         item: proc_macro::TokenStream,
     )            -> proc_macro::TokenStream {
     match syn::parse::<IdentAny>(attr) {
-        Ok (id)      => {match id.to_string().as_ref() {// 1 Parse 'ident' arguments first
-            "struct" => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
-            "enum"   => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ))},
-            "fn"     => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
-            _        => {let errmsg=format!("Expected either 'struct','fn','enum', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",id);
+        Ok (id)         => {match id.to_string().as_ref() {// 1 Parse 'ident' arguments first
+            "struct"    => {return docpos_struct(parse_macro_input!(item as ItemStruct))},
+            "enum"      => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ),false)},
+            "enum_sect" => {return docpos_enum  (parse_macro_input!(item as ItemEnum  ),true )},
+            "fn"        => {return docpos_fn    (parse_macro_input!(item as ItemFn    ))},
+            _           => {let errmsg=format!("Expected either 'struct','fn','enum', got '{}'\n(or use '#[docpos]' without an argument for auto-detection)",id);
                 return  quote! {compile_error!(#errmsg)}.into();}
         }},
         Err(_err   ) => {let (e_struct, e_enum, e_fn);            // 2 Detect via parsing the item
-            match syn::parse::<ItemStruct>(item.clone()) {Ok(item)=>{return docpos_struct(item)}, Err(err)=>{e_struct=err},};
-            match syn::parse::<ItemEnum  >(item.clone()) {Ok(item)=>{return docpos_enum  (item)}, Err(err)=>{e_enum  =err},};
-            match syn::parse::<ItemFn    >(item        ) {Ok(item)=>{return docpos_fn    (item)}, Err(err)=>{e_fn    =err},};
+            match syn::parse::<ItemStruct>(item.clone()) {Ok(item)=>{return docpos_struct(item      )}, Err(err)=>{e_struct=err},};
+            match syn::parse::<ItemEnum  >(item.clone()) {Ok(item)=>{return docpos_enum  (item,false)}, Err(err)=>{e_enum  =err},};
+            match syn::parse::<ItemFn    >(item        ) {Ok(item)=>{return docpos_fn    (item      )}, Err(err)=>{e_fn    =err},};
             let errmsg = formatdoc!(r#"Parsing ℯ as
                 Struct: {e_struct},
                 Enum  : {e_enum},
