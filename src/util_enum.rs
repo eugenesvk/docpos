@@ -69,7 +69,7 @@ pub fn doc_variants_shift_up<'a,I>(args: I) -> Result<Option<Vec<Attribute>>, sy
         IPos::Last   => {let (mut doc2prev, mut doc2last) = split_doc_in2(docs); //split docs between 2 variants
           if ! doc2prev.is_empty() {arg_prev.take().expect("saved prev arg").attrs.append(&mut doc2prev)}
           if ! doc2last.is_empty() {arg                                     .attrs.append(&mut doc2last)}},
-      }; // ↓ don't set on last item, break before
+      };
     }; arg_prev = Some(arg); // save arg even without docs since next docs might need to be (split)-attached to it
   }
   Ok(docs0enum)
