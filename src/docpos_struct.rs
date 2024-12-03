@@ -7,7 +7,7 @@ use syn::{Attribute, ItemStruct};
 
 
 /// Document struct arguments, but after them, not before
-pub fn docpos_struct(mut strct:ItemStruct) -> proc_macro::TokenStream {
+pub fn docpos_struct(mut strct:ItemStruct, extract:bool) -> proc_macro::TokenStream {
   try2!(strct.attrs.iter_mut().try_for_each(|attr| {
     if is_docpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
     } else                  {Ok(())}}));
