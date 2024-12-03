@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file
 
-[unreleased]: https://github.com/eugenesvk/docpos/compare/0.1.0...HEAD
+[unreleased]: https://github.com/eugenesvk/docpos/compare/0.2.0...HEAD
 ## [Unreleased]
 <!-- - ✨ __Added__ -->
   <!-- + new features -->
@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
 
+[0.2.0]: https://github.com/eugenesvk/docpos/releases/tag/0.2.0
+## [0.2.0]
   - Δ __Changed__
     + `#[docpos("fn")]` to accept bare identifiers `fn` instead of quoted `"fn"`
     + enum by default doesn't add its own section since the default empty section can't be removed(?), needs `#[docpos(enum_sect)]`
