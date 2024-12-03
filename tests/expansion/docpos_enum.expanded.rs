@@ -14,7 +14,7 @@ enum EnumyPos {
 }
 /// enumPos line1
 /// enumPos line2
-enum EnumyPos {
+enum EnumyPos2 {
     /// v1→v1 line 1
     /// v1→v1 line 2
     V1,
