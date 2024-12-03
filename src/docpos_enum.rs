@@ -12,7 +12,7 @@ pub fn docpos_enum(mut enm:ItemEnum) -> proc_macro::TokenStream {
     if is_docpos_main(attr) {Err(syn::Error::new_spanned(attr,"Duplicate attribute. This attribute must only appear once.",))
     } else                  {Ok(())}}));
 
-  let enum_docs = try2!(extract_struct_doc_attrs(&mut enm.attrs)); // extrac the doc attributes on the enum itself
+  let enum_docs = try2!(extract_struct_doc_attrs(&mut enm.attrs)); // extract the doc attributes on the enum itself
 
   let (doc_params_to_enm, doc_variants) = try2!(extract_doc_variants_shift_up(enm.variants.iter_mut()));
   let maybe_empty_doc_par_to_enum: Vec<Attribute> = doc_params_to_enm.unwrap_or_else(|| vec![]);
