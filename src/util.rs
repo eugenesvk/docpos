@@ -114,7 +114,7 @@ pub fn extract_fn_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<FunctionDocs, 
 /// extract the documentation from the doc comments of the struct and perform some additional logic
 pub fn extract_struct_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<StructDocs, syn::Error> {
     let mut before_args_section = Vec::with_capacity(attrs.len());
-    let mut after_args_section = Vec::with_capacity(attrs.len());
+    let mut after_args_section  = Vec::with_capacity(attrs.len());
 
     let mut idx = 0;
     while idx < attrs.len() { // parse the arguments before the arguments-section attribute
