@@ -16,10 +16,10 @@ All notable changes to this project will be documented in this file
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
 
-- Δ __Changed__
-  + `#[docpos("fn")]` to accept bare identifiers `fn` instead of quoted `"fn"`
+  - Δ __Changed__
+    + `#[docpos("fn")]` to accept bare identifiers `fn` instead of quoted `"fn"`
 
 [0.1.0]: https://github.com/eugenesvk/docpos/releases/tag/0.1.0
 ## [0.1.0]
-- ✨ __Added__
-  + Support for `enum` and `struct`
+  - ✨ __Added__
+    + Support for `enum` and `struct`
