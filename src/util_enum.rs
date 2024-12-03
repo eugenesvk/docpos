@@ -50,3 +50,27 @@ pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attrib
   }
   Ok((docs0enum,doc_fields))
 }
+
+/// Reorder the variants' docs (shifts up by 1), only extracting the first one so it can become part of the enum's doc
+/// The last variant's docs can be split between last-1 and last based on ///!
+pub fn doc_variants_shift_up<'a,I>(args: I) -> Result<Option<Vec<Attribute>>, syn::Error>
+  where                                  I:Iterator<Item = &'a mut Variant>,{
+  let mut docs0enum	:Option<Vec::<Attribute>>	= None;
+  let mut arg_prev 	:Option<&mut Variant    >	= None;
+  for (pos,arg) in args.with_position() {
+    let mut docs = extract_doc_attrs(&mut arg.attrs); // attrs:Attribute → meta:Meta::NameValue → value:Expr::Lit → lit:Lit::Str → token:" var→var1 doc"
+    if !docs.is_empty() {
+      match pos { // on ///! split the docs between 2 fields, removing !
+        IPos::Only   => {let (    doc2prev, mut doc2last) = split_doc_in2(docs);
+          if ! doc2prev.is_empty() {docs0enum = Some(     doc2prev)}  // pre///! → enum
+          if ! doc2last.is_empty() {arg.attrs.append(&mut doc2last)}},
+        IPos::First  => {           docs0enum = Some(     docs    ) },// no ///! split needed, pre-1st-variant docs go to enum
+        IPos::Middle => {           arg_prev.take().expect("saved prev arg").attrs.append(&mut docs    )}
+        IPos::Last   => {let (mut doc2prev, mut doc2last) = split_doc_in2(docs); //split docs between 2 variants
+          if ! doc2prev.is_empty() {arg_prev.take().expect("saved prev arg").attrs.append(&mut doc2prev)}
+          if ! doc2last.is_empty() {arg                                     .attrs.append(&mut doc2last)}},
+      }; // ↓ don't set on last item, break before
+    }; arg_prev = Some(arg); // save arg even without docs since next docs might need to be (split)-attached to it
+  }
+  Ok(docs0enum)
+}
