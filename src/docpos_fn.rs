@@ -1,8 +1,7 @@
 use quote::quote;
 use syn::{Attribute, ItemFn};
-use crate::util::{
-  extract_documented_generics_shift_up, extract_documented_parameters_shift_up, extract_fn_doc_attrs, make_doc_block
-};
+use crate::util::{extract_fn_doc_attrs, make_doc_block};
+use crate::util_fn::{extract_documented_generics_shift_up, extract_documented_parameters_shift_up,};
 use crate::try2 as try2;
 use crate::helper::*;
 
