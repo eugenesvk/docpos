@@ -111,6 +111,14 @@ pub fn extract_fn_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<FunctionDocs, 
     })
 }
 
+pub fn replace_str_in_doc_attr(attr:&mut Attribute, snew:&str) -> Result<(), syn::Error> {
+    if ! attr.path().is_ident("doc") {return Err(syn::Error::new_spanned(attr,"This attribute's path's ident isn't 'doc'",));}
+    if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
+        *lit_s = LitStr::new(snew, lit_s.span());
+        Ok(())
+    } else {Err(syn::Error::new_spanned(attr,"Couldn't find a string literal value to replace",))}
+}
+
 /// extract the documentation from the doc comments of the struct and perform some additional logic
 pub fn extract_struct_doc_attrs(attrs: &mut Vec<Attribute>) -> Result<StructDocs, syn::Error> {
     let mut before_args_section = Vec::with_capacity(attrs.len());
