@@ -10,7 +10,7 @@ use itertools::{Itertools, Position as IPos};
 
 /// Extract the field documentation from an iterator over struct fields, shifting the usual order by -1, returning the 1st field's docs separately so that it can be used as a struct comment.
 /// Will also remove all the doc comments from the collection of attributes, but will leave all the other attributes untouched.
-/// Also allows splitting the last field's docs into 2: belonging to the last field (after ///!) and to the previous one
+/// Also allows splitting the last field's docs into 2: belonging to the last field (after `///↓` or `///!`) and to the previous one
 ///
 /// struct StructyPos { /// this comment belongs to the struct, not to the next field, so will be returned separately
 ///  image_data : &[f32],/// this comment belongs to the preceding `image_data` field, not `nrows`
@@ -53,7 +53,7 @@ pub fn extract_doc_fields_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attribut
 }
 
 /// Reorder the fields' docs (shifts up by 1), only extracting the first one so it can become part of the struct's doc
-/// The last field's docs can be split between last-1 and last based on ///!
+/// The last field's docs can be split between last-1 and last based on `///↓` or `///!`
 pub fn doc_fields_shift_up<'a,I>(args: I) -> Result<Option<Vec<Attribute>>, syn::Error>
   where                                I:Iterator<Item = &'a mut Field>,{
   let mut doc0struct	:Option<Vec::<Attribute>>	= None;

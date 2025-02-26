@@ -10,7 +10,7 @@ use itertools::{Itertools, Position as IPos};
 
 /// Extract the variant documentation from an iterator over enum variants, shifting the usual order by -1, returning the 1st variant's docs separately so that it can be used as a enum comment.
 /// Will also remove all the doc comments from the collection of attributes, but will leave all the other attributes untouched.
-/// Also allows splitting the last variant's docs into 2: belonging to the last variant (after ///!) and to the previous one
+/// Also allows splitting the last variant's docs into 2: belonging to the last variant (after `///↓` or `///!`) and to the previous one
 ///
 /// enum EnumyPos { /// this comment belongs to the enum, not to the next variant, so will be returned separately
 ///  image_data,/// this comment belongs to the preceding `image_data` variant, not `nrows`
@@ -52,7 +52,7 @@ pub fn extract_doc_variants_shift_up<'a,I>(args: I) -> Result<(Option<Vec<Attrib
 }
 
 /// Reorder the variants' docs (shifts up by 1), only extracting the first one so it can become part of the enum's doc
-/// The last variant's docs can be split between last-1 and last based on ///!
+/// The last variant's docs can be split between last-1 and last based on `///↓` or `///!`
 pub fn doc_variants_shift_up<'a,I>(args: I) -> Result<Option<Vec<Attribute>>, syn::Error>
   where                                  I:Iterator<Item = &'a mut Variant>,{
   let mut docs0enum	:Option<Vec::<Attribute>>	= None;

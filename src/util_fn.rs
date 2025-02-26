@@ -9,7 +9,7 @@ use itertools::{Itertools, Position as IPos};
 
 /// Same as extract_documented_parameters, but shifts all docs by -1, returning the 1st parameter's docs separately,
 /// so that it can be used as a function comment
-/// Also allows splitting the last parameter's docs into 2: belonging to the last parameter (after ///!) and to the previous one
+/// Also allows splitting the last parameter's docs into 2: belonging to the last parameter (after `///↓` or `///!`) and to the previous one
 ///
 /// fn sum_image_rows( /// this comment belongs to the function, not to the next parameter, so will be returned separately
 ///  image_data : &[f32],/// this comment belongs to the preceding `image_data` parameter, not `nrows`
@@ -70,7 +70,7 @@ pub fn extract_documented_parameters_shift_up<'a,I>(args: I) -> Result<(Option<V
 
 
 /// Same as extract_documented_generics, but shifts all docs by -1
-/// Also allows splitting the last generic's doc into 2: belonging to the last generic (after ///!) and to the previous one
+/// Also allows splitting the last generic's doc into 2: belonging to the last generic (after `///↓` or `///!`) and to the previous one
 /// fn with_lifetimes_pos <
 ///   'a    ,/// a lifetime
 ///   S     ,
