@@ -186,7 +186,7 @@ where
 use itertools::{Itertools, Position as IPos};
 use syn::ExprLit;
 use syn::Lit;
-/// Split a doc in 2 parts: before ///! and after
+/// Split a doc in 2 parts: before ///↓ or ///! and after
 pub fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attribute>){
     let mut is_split = false;
     let mut docs2this:Vec::<Attribute> = vec![];
@@ -195,9 +195,9 @@ pub fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attr
         if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
             if ! is_split {
                 let s = lit_s.value();
-                if  s.starts_with('!') { is_split = true;
+                if  s.starts_with('!') || s.starts_with('↓') { is_split = true;
                     *lit_s = LitStr::new(&s[1..s.len()], lit_s.span());
-                        docs2next.push(attr); // assign post ///! doc lines to the last parameter
+                        docs2next.push(attr); // assign post ///↓ or ///! doc lines to the last parameter
                 } else {docs2this.push(attr);}
             }     else {docs2next.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
         }
