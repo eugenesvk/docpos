@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file
 
-[unreleased]: https://github.com/eugenesvk/docpos/compare/0.2.0...HEAD
+[unreleased]: https://github.com/eugenesvk/docpos/compare/0.2.1...HEAD
 ## [Unreleased]
 <!-- - ✨ __Added__ -->
   <!-- + new features -->
@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file
   <!-- + now removed features -->
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
+
+[0.2.1]: https://github.com/eugenesvk/docpos/releases/tag/0.2.1
+## [0.2.1]
 - ✨ __Added__
   + support for `///↓` for next-line comments in addition to `///!`
 
