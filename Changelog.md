@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file
   <!-- + now removed features -->
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
+- ✨ __Added__
+  + support for `///↓` for next-line comments in addition to `///!`
 
 [0.2.0]: https://github.com/eugenesvk/docpos/releases/tag/0.2.0
 ## [0.2.0]
