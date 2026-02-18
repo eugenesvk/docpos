@@ -59,7 +59,7 @@ fn sum_image_rows_pos( /// sum the rows of an image
 ) -> Result<(),String> {} 
 ```
 
-(Or use the main roxygen's crate macro `roxygen` for reguler pre-doc-comment support)
+(Or use the main roxygen's crate macro `roxygen` for regular pre-doc-comment support)
 
 You have to document at least one parameter (or generic), but you don't have
 to document all of them. The example above will produce documentation as 
