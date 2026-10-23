@@ -140,12 +140,20 @@ impl Parse        for IdentAny {fn parse(input:ParseStream) -> Result<IdentAny> 
     } else {Err(lookahead.error())}  }
 }
 
+use proc_macro::TokenStream;
+#[proc_macro]
+pub fn my_macro(_: TokenStream) -> TokenStream {
+    TokenStream::from(quote! {fn test(x:bool) { }})
+}
+
 #[proc_macro_attribute]
 /// the principal attribute inside this crate that lets us document function or struct arguments, but after them, not before
 /// Allows either `#[docpos(struct)]` (or 'fn', 'enum') literal syntax or just `#[docpos]` for autodetection
 pub fn docpos(attr: proc_macro::TokenStream // attributes of macro args: docpos(arg) would be Ident (though keywords can't be parsed by def)
     ,         item: proc_macro::TokenStream,
     )            -> proc_macro::TokenStream {
+    println!("attr= {:?}",attr);
+    println!("item= {:?}",item);
     match syn::parse::<IdentAny>(attr) {
         Ok (id)          => {match id.to_string().as_ref() {// 1 Parse 'ident' arguments first
             "struct"     => {return docpos_struct(parse_macro_input!(item as ItemStruct),false)},
