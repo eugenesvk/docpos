@@ -191,7 +191,9 @@ times much (after this crate was compiled once), but I haven't
 measured it... so take it with a grain of sodium-chloride.
 
 ### Known issues
+  - can proc macros catch syntactically invalid `///`-doc comments for the last struct/enum items and rewrite/move them? Attribute macros seem limited in requiring syntactically correct input.
   - the default doc sections (e.g., `Variants` for enums) persists even when it has no docs, so structs and enums don't add their own section unless explicitly called with `enum_sect`, `struct_sect`
   - unrealized potential to waste less space in the output: short comments could've been "inlined" to the function signature as regular comments instead of having the whole new section
   - rather limited support: functions (parameters and generics), structs (fields), enums (variants)
   - invalid enum variant's visibility qualifiers `enum Vis {pub V1}` are not rejected due to [syn design decision](https://stackoverflow.com/a/75356349)
+  - do spans need to be adjusted when comments are moved around?
