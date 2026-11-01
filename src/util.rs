@@ -195,9 +195,12 @@ pub fn split_doc_in2(docs_last:Vec::<Attribute>) -> (Vec::<Attribute>,Vec::<Attr
         if let Meta::NameValue(MetaNameValue {value: Expr::Lit(ExprLit{lit: Lit::Str(ref mut lit_s),..}),..}) = attr.meta {
             if ! is_split {
                 let s = lit_s.value();
-                if  s.starts_with('!') || s.starts_with('↓') { is_split = true;
+                if        s.starts_with('!') { is_split = true;
                     *lit_s = LitStr::new(&s[1..s.len()], lit_s.span());
-                        docs2next.push(attr); // assign post ///↓ or ///! doc lines to the last parameter
+                        docs2next.push(attr); // assign post ///! doc lines to the last parameter
+                } else if s.starts_with('↓') { is_split = true;
+                    *lit_s = LitStr::new(&s[3..s.len()], lit_s.span()); //↓ len is 3, not 1 like !
+                        docs2next.push(attr); // assign post ///↓…
                 } else {docs2this.push(attr);}
             }     else {docs2next.push(attr);} // everything post stplit goes to the last parameter, ignore further ///!
         }
