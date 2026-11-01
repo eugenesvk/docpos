@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file
   <!-- + now removed features -->
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
+- 🐞 __Fixed__
+  + docs splitting bug in `!` vs `↓`: these symbols have different length, so slices failed to match char boundaries correctly with `↓`
 
 [0.2.1]: https://github.com/eugenesvk/docpos/releases/tag/0.2.1
 ## [0.2.1]
