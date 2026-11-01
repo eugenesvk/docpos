@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file
 
-[unreleased]: https://github.com/eugenesvk/docpos/compare/0.2.1...HEAD
+[unreleased]: https://github.com/eugenesvk/docpos/compare/0.2.2...HEAD
 ## [Unreleased]
 <!-- - ✨ __Added__ -->
   <!-- + new features -->
@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file
   <!-- + now removed features -->
 <!-- - 🔒 __Security__ -->
   <!-- + vulnerabilities -->
+
+[0.2.2]: https://github.com/eugenesvk/docpos/releases/tag/0.2.2
+## [0.2.2]
 - 🐞 __Fixed__
   + docs splitting bug in `!` vs `↓`: these symbols have different length, so slices failed to match char boundaries correctly with `↓`
 
