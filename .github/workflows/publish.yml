@@ -1,0 +1,43 @@
+name: Publish → crates.io
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description	: 'Log level'
+        required   	: true
+        default    	: 'warning'
+        type       	: choice
+        options    	:
+        - info
+        - warning
+        - debug
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  Publish:
+    runs-on  : ubuntu-latest
+    container:
+      image  : rust:latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1 26-07
+        with:
+          persist-credentials: false
+      - name: Install toml-cli
+        run : cargo install toml-cli
+      - name: Check version
+        run : test "$(toml get -r Cargo.toml package.version)" = "${{ github.ref_name }}"
+      - name: Publish
+        run : cargo publish
+        env :
+          CARGO_REGISTRY_TOKEN: ${{ secrets.Crates_Update_Token }}
+# push    events: github.ref_name               = branch or tag that was pushed
+# release events: github.event.release.tag_name = release tag
+  #               github.ref_name might not always provide the expected value
+# other triggers like pull_request, the variable behaves differently, often pointing to the merge branch or base branch
